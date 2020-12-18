@@ -81,7 +81,7 @@ function urgen_vnrou(
   # set the pdf
   ccall(
     Libdl.dlsym(lib, :unur_distr_cvec_set_pdf), 
-    Cvoid,
+    Cint,
     (Ptr{UNUR_DISTR}, Ptr{Cvoid}),
     distr, pdf_c
   )
@@ -90,7 +90,7 @@ function urgen_vnrou(
   if center !== nothing
     ccall(
       Libdl.dlsym(lib, :unur_distr_cvec_set_center), 
-      Cvoid,
+      Cint,
       (Ptr{UNUR_DISTR}, Ref{Cdouble}),
       distr, center
     )
@@ -100,12 +100,22 @@ function urgen_vnrou(
   if mode !== nothing
     ccall(
       Libdl.dlsym(lib, :unur_distr_cvec_set_mode), 
-      Cvoid,
+      Cint,
       (Ptr{UNUR_DISTR}, Ref{Cdouble}),
       distr, mode
     )
   end
 
+  # set the rectangular domain
+  if lower !== nothing && upper !== nothing
+    ccall(
+      Libdl.dlsym(lib, :unur_distr_cvec_set_domain_rect),
+      Cint,
+      (Ptr{UNUR_DISTR}, Ref{Cdouble}, Ref{Cdouble}),
+      distr, lower, upper
+    )
+  end
+  
   # create the parameters object
   par = ccall(
     Libdl.dlsym(lib, :unur_vnrou_new), 
@@ -113,16 +123,6 @@ function urgen_vnrou(
     (Ptr{UNUR_DISTR}, ),
     distr
   )
-
-  # set the rectangular domain
-  if lower !== nothing && upper !== nothing
-    ccall(
-      Libdl.dlsym(lib, :unur_vnrou_set_u),
-      Cvoid,
-      (Ptr{UNUR_PAR}, Ref{Cdouble}, Ref{Cdouble}),
-      par, lower, upper
-    )
-  end
 
   # create the generator
   gen = ccall(
