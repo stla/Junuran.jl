@@ -130,8 +130,22 @@ function urgen_vnrou(
     distr
   )
 
+  # generator info
+  info = ccall(
+    Libdl.dlsym(lib, :unur_gen_info), 
+    Cstring,
+    (Ptr{UNUR_GEN}, Cint),
+    gen, 1
+  )
+
   # output
-  return (generator = gen, type = "cmv", dim = dim, unuran = lib)
+  return (
+    generator = gen, 
+    type = "cmv", 
+    dim = dim, 
+    info = unsafe_string(info), 
+    unuran = lib
+  )
 
 end # urgen_vnrou
 
