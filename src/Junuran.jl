@@ -12,6 +12,14 @@ end
 mutable struct UNUR_GEN
 end
 
+struct UnuRanGenerator
+  generator::Ptr{UNUR_GEN}
+  type::String
+  dim::Integer
+  info::String
+  unuran::Ptr{Nothing}
+end
+
 
 function urgen_vnrou(
   dim::Integer, 
@@ -139,12 +147,12 @@ function urgen_vnrou(
   )
 
   # output
-  return (
-    generator = gen, 
-    type = "cmv", 
-    dim = dim, 
-    info = unsafe_string(info), 
-    unuran = lib
+  return UnuRanGenerator(
+    gen, 
+    "cmv", 
+    dim, 
+    unsafe_string(info), 
+    lib
   )
 
 end # urgen_vnrou
