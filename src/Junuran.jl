@@ -86,6 +86,16 @@ function urgen_vnrou(
     distr, pdf_c
   )
 
+  # set the rectangular domain
+  if lower !== nothing && upper !== nothing
+    ccall(
+      Libdl.dlsym(lib, :unur_distr_cvec_set_domain_rect),
+      Cint,
+      (Ptr{UNUR_DISTR}, Ref{Cdouble}, Ref{Cdouble}),
+      distr, lower, upper
+    )
+  end
+  
   # set center
   if center !== nothing
     ccall(
@@ -106,16 +116,6 @@ function urgen_vnrou(
     )
   end
 
-  # set the rectangular domain
-  if lower !== nothing && upper !== nothing
-    ccall(
-      Libdl.dlsym(lib, :unur_distr_cvec_set_domain_rect),
-      Cint,
-      (Ptr{UNUR_DISTR}, Ref{Cdouble}, Ref{Cdouble}),
-      distr, lower, upper
-    )
-  end
-  
   # create the parameters object
   par = ccall(
     Libdl.dlsym(lib, :unur_vnrou_new), 
