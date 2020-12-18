@@ -1,5 +1,6 @@
 module Junuran
 
+import Base
 import Libdl
 export urgen_vnrou
 export ursample
@@ -20,6 +21,9 @@ struct UnuRanGenerator
   unuran::Ptr{Nothing}
 end
 
+Base.show(io::IO, urg::UnuRanGenerator) = print(io, urg.info)
+Base.show(io::IO, ::MIME"text/plain", urg::UnuRanGenerator) =
+            print(io, "UNU.RAN generator\n", urg)
 
 function urgen_vnrou(
   dim::Integer, 
